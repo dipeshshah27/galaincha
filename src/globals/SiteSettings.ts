@@ -13,6 +13,11 @@ export const SiteSettings: GlobalConfig = {
       localized: true,
     },
     {
+      name: 'contactPerson',
+      type: 'text',
+      localized: true,
+    },
+    {
       name: 'phone',
       type: 'text',
     },

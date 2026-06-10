@@ -45,6 +45,7 @@ export async function Footer({ settings, services }: Props) {
           </FooterColumn>
 
           <FooterColumn heading={t('footer.contactHeading')}>
+            {settings.contactPerson && <p>{settings.contactPerson}</p>}
             {settings.phone && (
               <a className="transition-colors hover:text-marigold" href={`tel:${settings.phone}`}>
                 {settings.phone}

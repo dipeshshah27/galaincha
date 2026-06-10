@@ -182,6 +182,10 @@ export interface Product {
 export interface Media {
   id: number;
   alt: string;
+  /**
+   * Attribution shown under the image where required (e.g. CC-licensed photos)
+   */
+  credit?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -450,6 +454,7 @@ export interface InquiriesSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  credit?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -531,6 +536,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SiteSetting {
   id: number;
   tagline: string;
+  contactPerson?: string | null;
   phone?: string | null;
   /**
    * Number in international format, e.g. +9779801234567
@@ -609,6 +615,7 @@ export interface AboutPage {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   tagline?: T;
+  contactPerson?: T;
   phone?: T;
   whatsapp?: T;
   email?: T;

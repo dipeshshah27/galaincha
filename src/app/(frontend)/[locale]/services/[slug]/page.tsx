@@ -77,15 +77,20 @@ export default async function ServicePage({ params }: Props) {
 
         <div className="space-y-8">
           {image?.url && (
-            <div className="relative aspect-4/5 overflow-hidden rounded-lg border border-line">
-              <Image
-                src={image.url}
-                alt={image.alt}
-                fill
-                sizes="(max-width: 1024px) 100vw, 40vw"
-                className="object-cover"
-              />
-            </div>
+            <figure>
+              <div className="relative aspect-4/5 overflow-hidden rounded-lg border border-line">
+                <Image
+                  src={image.url}
+                  alt={image.alt}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  className="object-cover"
+                />
+              </div>
+              {image.credit && (
+                <figcaption className="mt-2 text-xs text-ink-soft">{image.credit}</figcaption>
+              )}
+            </figure>
           )}
         </div>
       </div>

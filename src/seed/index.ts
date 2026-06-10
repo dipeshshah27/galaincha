@@ -1,8 +1,13 @@
+import { readFile } from 'fs/promises'
 import { getPayload, type Payload } from 'payload'
+import path from 'path'
 import sharp from 'sharp'
+import { fileURLToPath } from 'url'
 
 import config from '../payload.config'
-import { rugSVG, sceneSVG, type Colorway } from './rug-art'
+import { rugSVG, type Colorway } from './rug-art'
+
+const ASSETS_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'assets')
 
 // Run with: npm run seed
 // Idempotence: aborts if any user already exists.
@@ -54,6 +59,18 @@ async function uploadSVG(payload: Payload, svg: string, name: string, alt: strin
   })
 }
 
+// Real photos from Wikimedia Commons (see credit for license/attribution),
+// resized so the repo and uploads stay lean.
+async function uploadPhoto(payload: Payload, fileName: string, alt: string, credit: string) {
+  const original = await readFile(path.join(ASSETS_DIR, fileName))
+  const data = await sharp(original).resize({ width: 1600, withoutEnlargement: true }).jpeg({ quality: 82 }).toBuffer()
+  return payload.create({
+    collection: 'media',
+    data: { alt, credit },
+    file: { data, mimetype: 'image/jpeg', name: fileName, size: data.length },
+  })
+}
+
 type ProductSeed = {
   slug: string
   category: string
@@ -80,7 +97,7 @@ const PRODUCTS: ProductSeed[] = [
       priceRange: 'NPR 85,000 – 110,000',
       description: [
         'A classic Tibetan medallion knotted in deep indigo, the colour of the sky minutes before sunrise on the Khumbu trail.',
-        'Hand-knotted at 100 knots per square inch from highland sheep wool, washed in spring water and sun-dried on our Jawalakhel rooftop.',
+        'Hand-knotted at 100 knots per square inch from highland sheep wool, washed in spring water and sun-dried on our Narayantar rooftop.',
       ],
     },
     ne: {
@@ -345,7 +362,24 @@ async function seed() {
     productIds[product.slug] = doc.id
   }
 
-  payload.logger.info('Seeding services…')
+  payload.logger.info('Seeding services (uploading workshop photos)…')
+  const showroomPhoto = await uploadPhoto(
+    payload,
+    'handwoven-items.jpg',
+    'Showroom filled with hand-woven Nepali carpets and rugs',
+    'Photo: Nabin845, CC BY-SA 4.0, via Wikimedia Commons',
+  )
+  const loomPhoto = await uploadPhoto(
+    payload,
+    'weaving-loom.jpg',
+    'Three weavers working behind a carpet loom in Nepal',
+    'Photo: Peter van der Sluijs, CC BY-SA 3.0, via Wikimedia Commons',
+  )
+  const serviceImages: Record<string, number> = {
+    'ready-made-rugs': showroomPhoto.id,
+    'custom-orders': loomPhoto.id,
+  }
+
   const services = [
     {
       slug: 'ready-made-rugs',
@@ -353,7 +387,7 @@ async function seed() {
       order: 1,
       en: {
         title: 'Ready-Made Rugs',
-        summary: 'Hand-knotted rugs in stock at our Jawalakhel workshop — see them, walk on them, take one home.',
+        summary: 'Hand-knotted rugs in stock at our Narayantar workshop — see them, walk on them, take one home.',
         body: richText(
           'Every rug in our catalog is already woven, washed and ready to ship. What you see is the actual piece that arrives at your door.',
           'Visit the workshop to feel the wool underfoot, or send an inquiry from any rug page and we will reply with availability, exact pricing and delivery options — within Nepal and worldwide.',
@@ -362,7 +396,7 @@ async function seed() {
       },
       ne: {
         title: 'तयारी गलैंचा',
-        summary: 'जावलाखेल कार्यशालामा तयार रहेका हातले बुनिएका गलैंचाहरू — हेर्नुहोस्, टेक्नुहोस्, घर लैजानुहोस्।',
+        summary: 'नारायणटार कार्यशालामा तयार रहेका हातले बुनिएका गलैंचाहरू — हेर्नुहोस्, टेक्नुहोस्, घर लैजानुहोस्।',
         body: richText(
           'हाम्रो सूचीका हरेक गलैंचा बुनिसकिएका, धोइसकिएका र पठाउन तयार छन्। तपाईंले देख्नुभएकै गलैंचा तपाईंको ढोकामा आइपुग्छ।',
           'कार्यशालामा आएर ऊन छामेर हेर्नुहोस्, वा कुनै पनि गलैंचाको पृष्ठबाट सोधपुछ पठाउनुहोस् — उपलब्धता, मूल्य र ढुवानी विकल्पसहित जवाफ दिनेछौं।',
@@ -449,6 +483,7 @@ async function seed() {
         slug: service.slug,
         summary: service.en.summary,
         body: service.en.body,
+        image: serviceImages[service.slug],
         inquiryType: service.inquiryType,
         order: service.order,
         steps: service.en.steps,
@@ -472,17 +507,23 @@ async function seed() {
   }
 
   payload.logger.info('Seeding globals…')
-  const scene = await uploadSVG(payload, sceneSVG(), 'himalayan-dusk', 'Himalayan ridges at dusk')
+  const weaversPhoto = await uploadPhoto(
+    payload,
+    'weavers-folklife.jpg',
+    'Tibetan carpet weavers from Nepal demonstrating their craft at the loom',
+    'Photo: Smithsonian Institution, no known restrictions, via Wikimedia Commons',
+  )
 
   await payload.updateGlobal({
     slug: 'site-settings',
     locale: 'en',
     data: {
       tagline: 'Woven in Nepal',
-      phone: '+977-1-5551234',
-      whatsapp: '+9779801234567',
+      contactPerson: 'Deepak Shah',
+      phone: '+977 9840153038',
+      whatsapp: '+977 9840153038',
       email: 'namaste@galaincha.com',
-      address: 'Jawalakhel, Lalitpur\nKathmandu Valley, Nepal',
+      address: 'Narayantar, Jorpati\nKathmandu, Nepal',
       instagram: 'https://instagram.com/galaincha',
       facebook: 'https://facebook.com/galaincha',
       footerNote: 'Every rug is one of one.',
@@ -493,7 +534,8 @@ async function seed() {
     locale: 'ne',
     data: {
       tagline: 'नेपालमा बुनिएको',
-      address: 'जावलाखेल, ललितपुर\nकाठमाडौं उपत्यका, नेपाल',
+      contactPerson: 'दीपक शाह',
+      address: 'नारायणटार, जोरपाटी\nकाठमाडौं, नेपाल',
       footerNote: 'हरेक गलैंचा एउटै मात्र।',
     },
   })
@@ -536,8 +578,8 @@ async function seed() {
     data: {
       heading: 'Our story',
       intro:
-        'Galaincha began with one loom in a Jawalakhel courtyard in 1974. Today thirty weavers work under the same roof — many of them children and grandchildren of the first.',
-      image: scene.id,
+        'Galaincha began with one loom in a Narayantar courtyard in 1974. Today thirty weavers work under the same roof — many of them children and grandchildren of the first.',
+      image: weaversPhoto.id,
       body: richText(
         'The Tibetan carpet tradition arrived in Kathmandu in the early 1960s, and our family learned it the way everyone did then: by sitting beside a master until our hands knew the knots.',
         'We still card and spin by hand, dye with plants where we can, and wash every rug in the traditional way. The workshop is open to visitors six days a week — come watch a rug grow.',
@@ -551,7 +593,7 @@ async function seed() {
     data: {
       heading: 'हाम्रो कथा',
       intro:
-        'गलैंचाको सुरुवात सन् १९७४ मा जावलाखेलको एउटा आँगनमा एउटै तानबाट भयो। आज त्यही छानामुनि तीस जना बुनकर काम गर्छन् — धेरैजसो पहिलो पुस्ताकै छोराछोरी र नातिनातिना।',
+        'गलैंचाको सुरुवात सन् १९७४ मा नारायणटारको एउटा आँगनमा एउटै तानबाट भयो। आज त्यही छानामुनि तीस जना बुनकर काम गर्छन् — धेरैजसो पहिलो पुस्ताकै छोराछोरी र नातिनातिना।',
       body: richText(
         'तिब्बती गलैंचा परम्परा सन् १९६० को दशकको सुरुमा काठमाडौं आइपुग्यो, र हाम्रो परिवारले त्यतिबेला सबैले जसरी सिक्थे त्यसरी नै सिक्यो: हातले गाँठा नचिनुन्जेल गुरुको छेउमा बसेर।',
         'हामी अझै हातैले ऊन कोर्छौं र कात्छौं, सकेसम्म वनस्पतिले रंगाउँछौं, र हरेक गलैंचा परम्परागत तरिकाले धुन्छौं। कार्यशाला हप्ताको छ दिन आगन्तुकका लागि खुला छ — गलैंचा बन्दै गरेको हेर्न आउनुहोस्।',

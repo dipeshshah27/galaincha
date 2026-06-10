@@ -33,15 +33,20 @@ export default async function AboutRoute({ params }: Props) {
       <CarpetDivider className="my-12" />
 
       {image?.url && (
-        <div className="relative mb-12 aspect-video overflow-hidden rounded-lg border border-line">
-          <Image
-            src={image.url}
-            alt={image.alt}
-            fill
-            sizes="(max-width: 896px) 100vw, 896px"
-            className="object-cover"
-          />
-        </div>
+        <figure className="mb-12">
+          <div className="relative aspect-video overflow-hidden rounded-lg border border-line">
+            <Image
+              src={image.url}
+              alt={image.alt}
+              fill
+              sizes="(max-width: 896px) 100vw, 896px"
+              className="object-cover"
+            />
+          </div>
+          {image.credit && (
+            <figcaption className="mt-2 text-xs text-ink-soft">{image.credit}</figcaption>
+          )}
+        </figure>
       )}
 
       {about.body && <RichTextContent data={about.body} className="text-lg" />}

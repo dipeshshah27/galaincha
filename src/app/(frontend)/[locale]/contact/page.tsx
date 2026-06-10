@@ -36,6 +36,11 @@ export default async function ContactPage({ params }: Props) {
 
       <div className="grid gap-12 lg:grid-cols-[2fr_3fr]">
         <div className="space-y-6">
+          {settings.contactPerson && (
+            <ContactItem label={t('contact.person')}>
+              <p>{settings.contactPerson}</p>
+            </ContactItem>
+          )}
           {settings.phone && (
             <ContactItem label={t('contact.phone')}>
               <a className="transition-colors hover:text-crimson" href={`tel:${settings.phone}`}>

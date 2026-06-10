@@ -79,6 +79,7 @@
   "contact": {
     "title": "Contact us",
     "intro": "Visit the workshop, call us, or send a message — we'd love to hear from you.",
+    "person": "Contact person",
     "phone": "Phone",
     "email": "Email",
     "whatsapp": "WhatsApp",
