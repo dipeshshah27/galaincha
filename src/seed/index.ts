@@ -1,13 +1,8 @@
-import { readFile } from 'fs/promises'
 import { getPayload, type Payload } from 'payload'
-import path from 'path'
 import sharp from 'sharp'
-import { fileURLToPath } from 'url'
 
 import config from '../payload.config'
-import { rugSVG, type Colorway } from './rug-art'
-
-const ASSETS_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'assets')
+import { rugSVG, sceneSVG, type Colorway } from './rug-art'
 
 // Run with: npm run seed
 // Idempotence: aborts if any user already exists.
@@ -56,18 +51,6 @@ async function uploadSVG(payload: Payload, svg: string, name: string, alt: strin
     collection: 'media',
     data: { alt },
     file: { data, mimetype: 'image/png', name: `${name}.png`, size: data.length },
-  })
-}
-
-// Real photos from Wikimedia Commons (see credit for license/attribution),
-// resized so the repo and uploads stay lean.
-async function uploadPhoto(payload: Payload, fileName: string, alt: string, credit: string) {
-  const original = await readFile(path.join(ASSETS_DIR, fileName))
-  const data = await sharp(original).resize({ width: 1600, withoutEnlargement: true }).jpeg({ quality: 82 }).toBuffer()
-  return payload.create({
-    collection: 'media',
-    data: { alt, credit },
-    file: { data, mimetype: 'image/jpeg', name: fileName, size: data.length },
   })
 }
 
@@ -362,24 +345,7 @@ async function seed() {
     productIds[product.slug] = doc.id
   }
 
-  payload.logger.info('Seeding services (uploading workshop photos)…')
-  const showroomPhoto = await uploadPhoto(
-    payload,
-    'handwoven-items.jpg',
-    'Showroom filled with hand-woven Nepali carpets and rugs',
-    'Photo: Nabin845, CC BY-SA 4.0, via Wikimedia Commons',
-  )
-  const loomPhoto = await uploadPhoto(
-    payload,
-    'weaving-loom.jpg',
-    'Three weavers working behind a carpet loom in Nepal',
-    'Photo: Peter van der Sluijs, CC BY-SA 3.0, via Wikimedia Commons',
-  )
-  const serviceImages: Record<string, number> = {
-    'ready-made-rugs': showroomPhoto.id,
-    'custom-orders': loomPhoto.id,
-  }
-
+  payload.logger.info('Seeding services…')
   const services = [
     {
       slug: 'ready-made-rugs',
@@ -483,7 +449,6 @@ async function seed() {
         slug: service.slug,
         summary: service.en.summary,
         body: service.en.body,
-        image: serviceImages[service.slug],
         inquiryType: service.inquiryType,
         order: service.order,
         steps: service.en.steps,
@@ -507,12 +472,7 @@ async function seed() {
   }
 
   payload.logger.info('Seeding globals…')
-  const weaversPhoto = await uploadPhoto(
-    payload,
-    'weavers-folklife.jpg',
-    'Tibetan carpet weavers from Nepal demonstrating their craft at the loom',
-    'Photo: Smithsonian Institution, no known restrictions, via Wikimedia Commons',
-  )
+  const scene = await uploadSVG(payload, sceneSVG(), 'himalayan-dusk', 'Himalayan ridges at dusk')
 
   await payload.updateGlobal({
     slug: 'site-settings',
@@ -579,7 +539,7 @@ async function seed() {
       heading: 'Our story',
       intro:
         'Galaincha began with one loom in a Narayantar courtyard in 1974. Today thirty weavers work under the same roof — many of them children and grandchildren of the first.',
-      image: weaversPhoto.id,
+      image: scene.id,
       body: richText(
         'The Tibetan carpet tradition arrived in Kathmandu in the early 1960s, and our family learned it the way everyone did then: by sitting beside a master until our hands knew the knots.',
         'We still card and spin by hand, dye with plants where we can, and wash every rug in the traditional way. The workshop is open to visitors six days a week — come watch a rug grow.',

@@ -44,3 +44,21 @@ export function rugSVG({ ground, field, border, medallion, accent }: Colorway): 
   </g>
 </svg>`
 }
+
+// Wide hero/about scene — layered Himalayan ridges at dusk.
+export function sceneSVG(): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3a64"/>
+      <stop offset="0.6" stop-color="#8c5a74"/>
+      <stop offset="1" stop-color="#d2941f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="1180" cy="330" r="90" fill="#f1e9d7" opacity="0.92"/>
+  <path d="M0 560 L210 380 L390 540 L600 330 L800 560 L1010 400 L1240 580 L1430 460 L1600 560 L1600 900 L0 900 Z" fill="#3a4a7c" opacity="0.85"/>
+  <path d="M0 680 L260 520 L470 670 L720 480 L980 690 L1210 560 L1450 700 L1600 620 L1600 900 L0 900 Z" fill="#28365e"/>
+  <path d="M0 800 L320 660 L640 810 L920 680 L1230 820 L1600 700 L1600 900 L0 900 Z" fill="#1c2540"/>
+</svg>`
+}

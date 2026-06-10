@@ -182,10 +182,6 @@ export interface Product {
 export interface Media {
   id: number;
   alt: string;
-  /**
-   * Attribution shown under the image where required (e.g. CC-licensed photos)
-   */
-  credit?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -454,7 +450,6 @@ export interface InquiriesSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
-  credit?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

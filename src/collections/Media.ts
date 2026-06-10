@@ -11,13 +11,6 @@ export const Media: CollectionConfig = {
       type: 'text',
       required: true,
     },
-    {
-      name: 'credit',
-      type: 'text',
-      admin: {
-        description: 'Attribution shown under the image where required (e.g. CC-licensed photos)',
-      },
-    },
   ],
   upload: true,
 }
