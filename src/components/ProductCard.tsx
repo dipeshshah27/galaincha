@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 import { Link } from '@/i18n/navigation'
@@ -9,14 +9,16 @@ type Props = {
   product: Product
 }
 
-export async function ProductCard({ product }: Props) {
-  const t = await getTranslations()
+// Universal component: useTranslations works in Server Components and in the
+// client RugsExplorer grid alike.
+export function ProductCard({ product }: Props) {
+  const t = useTranslations()
   const cover = asMedia(product.images?.[0])
 
   return (
     <Link
       href={`/rugs/${product.slug}`}
-      className="group overflow-hidden rounded-lg border border-line bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-crimson/40 hover:shadow-xl"
+      className="group block overflow-hidden rounded-lg border border-line bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-crimson/40 hover:shadow-xl"
     >
       <div className="relative aspect-4/5 overflow-hidden">
         {cover?.url && (

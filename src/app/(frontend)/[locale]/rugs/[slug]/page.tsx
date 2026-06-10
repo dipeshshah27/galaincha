@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
 import { CarpetDivider } from '@/components/CarpetDivider'
 import { InquiryForm } from '@/components/InquiryForm'
+import { ProductGallery, type GalleryImage } from '@/components/ProductGallery'
 import { RichTextContent } from '@/components/RichTextContent'
+import { Reveal } from '@/components/motion/Reveal'
 import { Link } from '@/i18n/navigation'
 import { resolveLocale } from '@/i18n/locale'
 import { asMedia } from '@/lib/media'
@@ -36,8 +37,13 @@ export default async function ProductPage({ params }: Props) {
     notFound()
   }
 
-  const images = (product.images ?? []).map(asMedia).filter((media) => media !== null)
-  const [cover, ...rest] = images
+  const images: GalleryImage[] = (product.images ?? [])
+    .map(asMedia)
+    .flatMap((media) =>
+      media && typeof media.url === 'string'
+        ? [{ id: media.id, url: media.url, alt: media.alt }]
+        : [],
+    )
   const category = typeof product.category === 'object' ? product.category : null
 
   return (
@@ -50,45 +56,12 @@ export default async function ProductPage({ params }: Props) {
       </Link>
 
       <div className="mt-8 grid gap-12 lg:grid-cols-2">
-        {/* Gallery */}
-        <div>
-          {cover?.url && (
-            <div className="relative aspect-4/5 overflow-hidden rounded-lg border border-line">
-              <Image
-                src={cover.url}
-                alt={cover.alt}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-          )}
-          {rest.length > 0 && (
-            <div className="mt-4 grid grid-cols-4 gap-4">
-              {rest.map(
-                (media) =>
-                  media.url && (
-                    <div
-                      key={media.id}
-                      className="relative aspect-square overflow-hidden rounded-md border border-line"
-                    >
-                      <Image
-                        src={media.url}
-                        alt={media.alt}
-                        fill
-                        sizes="(max-width: 1024px) 25vw, 12vw"
-                        className="object-cover"
-                      />
-                    </div>
-                  ),
-              )}
-            </div>
-          )}
+        <div className="animate-rise">
+          <ProductGallery images={images} />
         </div>
 
         {/* Details */}
-        <div>
+        <div className="animate-rise delay-1">
           {category && (
             <p className="text-sm font-semibold uppercase tracking-widest text-marigold">
               {category.name}
@@ -122,14 +95,14 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="mx-auto mt-20 max-w-2xl">
+      <Reveal className="mx-auto mt-20 max-w-2xl">
         <InquiryForm
           type="purchase"
           productId={product.id}
           heading={t('product.enquireHeading')}
           sub={t('product.enquireSub')}
         />
-      </div>
+      </Reveal>
     </div>
   )
 }

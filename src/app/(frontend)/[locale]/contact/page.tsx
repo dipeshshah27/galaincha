@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
-import { CarpetDivider } from '@/components/CarpetDivider'
 import { InquiryForm } from '@/components/InquiryForm'
+import { AnimatedDivider } from '@/components/motion/AnimatedDivider'
+import { Reveal } from '@/components/motion/Reveal'
+import { RevealStagger, RevealStaggerItem } from '@/components/motion/RevealStagger'
 import { resolveLocale } from '@/i18n/locale'
 import { getSiteSettings } from '@/lib/queries'
 
@@ -27,15 +29,17 @@ export default async function ContactPage({ params }: Props) {
 
   return (
     <div className="px-4 py-16 sm:px-6 mx-auto max-w-6xl">
-      <h1 className="font-display text-5xl font-semibold text-ink sm:text-6xl">
+      <h1 className="animate-rise font-display text-5xl font-semibold text-ink sm:text-6xl">
         {t('contact.title')}
       </h1>
-      <p className="mt-4 max-w-2xl text-xl text-ink-soft">{t('contact.intro')}</p>
+      <p className="animate-rise delay-1 mt-4 max-w-2xl text-xl text-ink-soft">
+        {t('contact.intro')}
+      </p>
 
-      <CarpetDivider className="my-12" />
+      <AnimatedDivider className="my-12" />
 
       <div className="grid gap-12 lg:grid-cols-[2fr_3fr]">
-        <div className="space-y-6">
+        <RevealStagger className="space-y-6">
           {settings.contactPerson && (
             <ContactItem label={t('contact.person')}>
               <p>{settings.contactPerson}</p>
@@ -75,9 +79,11 @@ export default async function ContactPage({ params }: Props) {
               <p className="whitespace-pre-line">{settings.address}</p>
             </ContactItem>
           )}
-        </div>
+        </RevealStagger>
 
-        <InquiryForm type="general" heading={t('contact.formHeading')} />
+        <Reveal direction="right">
+          <InquiryForm type="general" heading={t('contact.formHeading')} />
+        </Reveal>
       </div>
     </div>
   )
@@ -85,9 +91,11 @@ export default async function ContactPage({ params }: Props) {
 
 function ContactItem({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="p-5 rounded-lg border border-line bg-surface">
-      <p className="text-sm font-semibold uppercase tracking-widest text-marigold">{label}</p>
-      <div className="mt-1.5 text-lg font-medium text-ink">{children}</div>
-    </div>
+    <RevealStaggerItem>
+      <div className="p-5 rounded-lg border border-line bg-surface">
+        <p className="text-sm font-semibold uppercase tracking-widest text-marigold">{label}</p>
+        <div className="mt-1.5 text-lg font-medium text-ink">{children}</div>
+      </div>
+    </RevealStaggerItem>
   )
 }

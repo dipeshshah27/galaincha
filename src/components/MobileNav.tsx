@@ -1,5 +1,6 @@
 'use client'
 
+import { AnimatePresence, m, type Variants } from 'motion/react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
@@ -12,6 +13,22 @@ export type NavLink = {
 
 type Props = {
   links: NavLink[]
+}
+
+const panelVariants: Variants = {
+  hidden: { opacity: 0, y: -12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.25, ease: 'easeOut', staggerChildren: 0.05 },
+  },
+  exit: { opacity: 0, y: -12, transition: { duration: 0.18, ease: 'easeIn' } },
+}
+
+const linkVariants: Variants = {
+  hidden: { opacity: 0, x: -14 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: 'easeOut' } },
+  exit: { opacity: 0 },
 }
 
 export function MobileNav({ links }: Props) {
@@ -28,31 +45,49 @@ export function MobileNav({ links }: Props) {
         aria-label={open ? t('closeMenu') : t('menu')}
       >
         <svg className="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          {open ? (
-            <path d="M6 6l12 12M18 6 6 18" />
-          ) : (
-            <path d="M3.5 7h17M3.5 12h17M3.5 17h17" />
-          )}
+          {/* top and bottom bars rotate into an X; middle bar fades */}
+          <m.path
+            d="M3.5 7 L20.5 7"
+            animate={open ? { d: 'M6 6 L18 18' } : { d: 'M3.5 7 L20.5 7' }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+          />
+          <m.path
+            d="M3.5 12 L20.5 12"
+            animate={{ opacity: open ? 0 : 1 }}
+            transition={{ duration: 0.15 }}
+          />
+          <m.path
+            d="M3.5 17 L20.5 17"
+            animate={open ? { d: 'M18 6 L6 18' } : { d: 'M3.5 17 L20.5 17' }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+          />
         </svg>
       </button>
 
-      {open && (
-        <nav
-          className="px-4 py-4 absolute inset-x-0 top-full flex flex-col gap-1 border-b border-line bg-ground shadow-lg"
-          aria-label={t('menu')}
-        >
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className="px-3 py-2.5 rounded-md text-lg font-medium text-ink transition-colors hover:bg-surface hover:text-crimson"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-      )}
+      <AnimatePresence>
+        {open && (
+          <m.nav
+            className="px-4 py-4 absolute inset-x-0 top-full flex flex-col gap-1 border-b border-line bg-ground shadow-lg"
+            aria-label={t('menu')}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={panelVariants}
+          >
+            {links.map((link) => (
+              <m.div key={link.href} variants={linkVariants}>
+                <Link
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="px-3 py-2.5 block rounded-md text-lg font-medium text-ink transition-colors hover:bg-surface hover:text-crimson"
+                >
+                  {link.label}
+                </Link>
+              </m.div>
+            ))}
+          </m.nav>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

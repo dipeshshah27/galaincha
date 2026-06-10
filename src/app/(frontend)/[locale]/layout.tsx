@@ -8,6 +8,7 @@ import React from 'react'
 
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { MotionProvider } from '@/components/motion/MotionProvider'
 import { routing } from '@/i18n/routing'
 import { getServices, getSiteSettings } from '@/lib/queries'
 
@@ -62,9 +63,11 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className="bg-ground font-sans text-ink antialiased">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <Header services={services} />
-            <main>{children}</main>
-            <Footer settings={settings} services={services} />
+            <MotionProvider>
+              <Header services={services} />
+              <main>{children}</main>
+              <Footer settings={settings} services={services} />
+            </MotionProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

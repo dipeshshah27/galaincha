@@ -36,7 +36,8 @@
     "intro": "Every piece is hand-knotted from Himalayan wool, dyed in small batches, and washed in mountain water.",
     "all": "All",
     "empty": "No rugs in this category yet — check back soon.",
-    "knotsPerInch": "{count} knots/in²"
+    "knotsPerInch": "{count} knots/in²",
+    "searchPlaceholder": "Search rugs…"
   },
   "product": {
     "size": "Size",

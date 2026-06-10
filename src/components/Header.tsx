@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server'
 
 import { Link } from '@/i18n/navigation'
 import type { Service } from '@/payload-types'
+import { HeaderShell } from './HeaderShell'
 import { LocaleSwitcher } from './LocaleSwitcher'
 import { MobileNav, type NavLink } from './MobileNav'
 import { ThemeToggle } from './ThemeToggle'
@@ -24,7 +25,7 @@ export async function Header({ services }: Props) {
   ]
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-ground/85 backdrop-blur-md">
+    <HeaderShell>
       <div className="px-4 sm:px-6 mx-auto flex h-16 max-w-6xl items-center justify-between gap-3">
         <Link href="/" className="flex items-baseline gap-2">
           <span className="font-display text-2xl font-semibold tracking-tight text-crimson">
@@ -51,6 +52,6 @@ export async function Header({ services }: Props) {
           <MobileNav links={links} />
         </div>
       </div>
-    </header>
+    </HeaderShell>
   )
 }

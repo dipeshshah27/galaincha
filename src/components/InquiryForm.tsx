@@ -1,5 +1,6 @@
 'use client'
 
+import { m } from 'motion/react'
 import { useTranslations } from 'next-intl'
 import { useActionState } from 'react'
 
@@ -30,9 +31,34 @@ export function InquiryForm({ type, productId, heading, sub }: Props) {
 
   if (state.status === 'success') {
     return (
-      <div className="p-8 rounded-lg border border-marigold/40 bg-surface text-center">
-        <p className="font-display text-xl font-semibold text-ink">✓ {t('success')}</p>
-      </div>
+      <m.div
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="p-8 rounded-lg border border-marigold/40 bg-surface text-center"
+      >
+        <svg className="mx-auto size-14 text-marigold" viewBox="0 0 56 56" fill="none" stroke="currentColor">
+          <m.circle
+            cx="28"
+            cy="28"
+            r="25"
+            strokeWidth="2.5"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          />
+          <m.path
+            d="M17 29 l8 8 l15 -16"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.45, delay: 0.5, ease: 'easeOut' }}
+          />
+        </svg>
+        <p className="mt-4 font-display text-xl font-semibold text-ink">{t('success')}</p>
+      </m.div>
     )
   }
 
@@ -78,13 +104,14 @@ export function InquiryForm({ type, productId, heading, sub }: Props) {
 
         {state.formError && <p className="text-sm font-medium text-crimson">{t('errorGeneric')}</p>}
 
-        <button
+        <m.button
           type="submit"
           disabled={isPending}
+          whileTap={{ scale: 0.96 }}
           className="px-6 py-3 mt-2 inline-flex items-center justify-center self-start rounded-full bg-crimson font-semibold text-snow transition-colors hover:bg-crimson-deep disabled:opacity-60"
         >
           {isPending ? t('sending') : t('submit')}
-        </button>
+        </m.button>
       </div>
     </form>
   )
@@ -108,7 +135,16 @@ function Field({
         {label}
       </span>
       {children}
-      {error && <span className="mt-1 block text-sm text-crimson">{error}</span>}
+      {error && (
+        <m.span
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+          className="mt-1 block text-sm text-crimson"
+        >
+          {error}
+        </m.span>
+      )}
     </label>
   )
 }

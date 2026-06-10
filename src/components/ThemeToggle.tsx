@@ -1,5 +1,6 @@
 'use client'
 
+import { AnimatePresence, m } from 'motion/react'
 import { useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
 import { useSyncExternalStore } from 'react'
@@ -30,9 +31,20 @@ export function ThemeToggle() {
       title={mounted ? t(current as (typeof ORDER)[number]) : t('toggle')}
       aria-label={t('toggle')}
     >
-      {current === 'light' && <SunIcon />}
-      {current === 'dark' && <MoonIcon />}
-      {current === 'system' && <SystemIcon />}
+      <AnimatePresence mode="popLayout" initial={false}>
+        <m.span
+          key={current}
+          className="inline-flex"
+          initial={{ rotate: -90, scale: 0.4, opacity: 0 }}
+          animate={{ rotate: 0, scale: 1, opacity: 1 }}
+          exit={{ rotate: 90, scale: 0.4, opacity: 0 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+        >
+          {current === 'light' && <SunIcon />}
+          {current === 'dark' && <MoonIcon />}
+          {current === 'system' && <SystemIcon />}
+        </m.span>
+      </AnimatePresence>
     </button>
   )
 }
