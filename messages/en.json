@@ -1,0 +1,121 @@
+{
+  "common": {
+    "brand": "Galaincha",
+    "tagline": "Woven in Nepal",
+    "viewAll": "View all"
+  },
+  "nav": {
+    "home": "Home",
+    "rugs": "Rugs",
+    "about": "About",
+    "contact": "Contact",
+    "menu": "Menu",
+    "closeMenu": "Close menu"
+  },
+  "theme": {
+    "toggle": "Switch theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Language"
+  },
+  "home": {
+    "servicesHeading": "What we do",
+    "servicesSub": "Three generations of weaving, washing and restoring Himalayan rugs.",
+    "featuredHeading": "Featured rugs",
+    "featuredSub": "Hand-knotted in the valley, each one signed by its weavers.",
+    "ctaHeading": "Have a design in mind?",
+    "ctaBody": "Send us a sketch, a photo, or just an idea — our weavers will turn it into a one-of-a-kind rug.",
+    "ctaButton": "Start a custom order",
+    "browseRugs": "Explore the rugs"
+  },
+  "catalog": {
+    "title": "Our rugs",
+    "intro": "Every piece is hand-knotted from Himalayan wool, dyed in small batches, and washed in mountain water.",
+    "all": "All",
+    "empty": "No rugs in this category yet — check back soon.",
+    "knotsPerInch": "{count} knots/in²"
+  },
+  "product": {
+    "size": "Size",
+    "material": "Material",
+    "knotDensity": "Knot density",
+    "priceRange": "Price range",
+    "enquireHeading": "Enquire about this rug",
+    "enquireSub": "Tell us where you are and we'll reply with availability, exact pricing and shipping.",
+    "backToRugs": "All rugs"
+  },
+  "materials": {
+    "wool": "Himalayan wool",
+    "silk": "Silk",
+    "wool-silk": "Wool & silk",
+    "hemp": "Hemp",
+    "allo": "Allo (nettle)"
+  },
+  "services": {
+    "processHeading": "How it works",
+    "enquireHeading": "Ask about this service",
+    "enquireSub": "Leave your details and a short note — we usually reply within a day."
+  },
+  "form": {
+    "name": "Your name",
+    "email": "Email",
+    "phone": "Phone",
+    "contactHint": "Give us an email or a phone number so we can reach you.",
+    "message": "Your message",
+    "submit": "Send inquiry",
+    "sending": "Sending…",
+    "success": "Thank you — we've received your inquiry and will be in touch soon.",
+    "errorGeneric": "Something went wrong. Please try again, or reach us on WhatsApp.",
+    "errors": {
+      "nameRequired": "Please tell us your name.",
+      "contactRequired": "We need an email or phone number to reply.",
+      "emailInvalid": "That email address doesn't look right.",
+      "messageRequired": "Please write a short message."
+    }
+  },
+  "contact": {
+    "title": "Contact us",
+    "intro": "Visit the workshop, call us, or send a message — we'd love to hear from you.",
+    "phone": "Phone",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "address": "Workshop",
+    "formHeading": "Send us a message"
+  },
+  "about": {
+    "title": "Our story"
+  },
+  "footer": {
+    "navHeading": "Explore",
+    "servicesHeading": "Services",
+    "contactHeading": "Contact",
+    "rights": "All rights reserved.",
+    "madeIn": "Handwoven in Kathmandu, Nepal"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The thread you followed has come loose — this page doesn't exist.",
+    "cta": "Back home"
+  },
+  "meta": {
+    "home": {
+      "title": "Galaincha — Handwoven Carpets & Rugs from Nepal",
+      "description": "Hand-knotted Himalayan carpets and rugs, custom orders and professional carpet washing — woven in Kathmandu, Nepal."
+    },
+    "rugs": {
+      "title": "Rugs",
+      "description": "Browse hand-knotted Himalayan wool and silk rugs, woven and washed in Kathmandu, Nepal."
+    },
+    "about": {
+      "title": "Our story",
+      "description": "Three generations of Himalayan rug weaving in Kathmandu, Nepal."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Visit our Kathmandu workshop or send an inquiry about rugs, custom orders and carpet washing."
+    }
+  }
+}

@@ -1,164 +1,162 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Galaincha — "Himalayan loom" design tokens.
+  Light: undyed wool, vegetable-dye crimson, Tibetan indigo, marigold.
+  Dark: night over the Himalayas — deep indigo ground, dyes glow warmer.
+  The palette lives in CSS variables so both themes share one set of
+  Tailwind color utilities (bg-ground, text-ink, …).
+*/
 :root {
-  --font-mono: 'Roboto Mono', monospace;
+  --ground: #f6f0e3;
+  --surface: #fdfaf2;
+  --ink: #33281c;
+  --ink-soft: #71614d;
+  --crimson: #ae1a37;
+  --crimson-deep: #8c1129;
+  --indigo: #2b3a64;
+  --indigo-deep: #1e2947;
+  --marigold: #d2941f;
+  --line: #e3d8bf;
+  --weave: rgba(51, 40, 28, 0.05);
 }
 
-* {
-  box-sizing: border-box;
+.dark {
+  --ground: #121728;
+  --surface: #1a2135;
+  --ink: #f0e7d3;
+  --ink-soft: #a89e89;
+  --crimson: #e25c72;
+  --crimson-deep: #c93b55;
+  --indigo: #94a7d9;
+  --indigo-deep: #0d1322;
+  --marigold: #e2ab3f;
+  --line: #2b3450;
+  --weave: rgba(240, 231, 211, 0.045);
 }
 
-html {
-  font-size: 18px;
-  line-height: 32px;
+@theme inline {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-crimson: var(--crimson);
+  --color-crimson-deep: var(--crimson-deep);
+  --color-indigo: var(--indigo);
+  --color-indigo-deep: var(--indigo-deep);
+  --color-marigold: var(--marigold);
+  --color-line: var(--line);
 
-  background: rgb(0, 0, 0);
-  -webkit-font-smoothing: antialiased;
+  /* Static (theme-independent) colors for the footer's night-sky band */
+  --color-night: #1c2540;
+  --color-night-deep: #131a30;
+  --color-snow: #f1e9d7;
+  --color-snow-soft: #b4aed1;
+
+  /* Fraunces has no Devanagari glyphs — Mukta catches them before Georgia */
+  --font-display: var(--font-fraunces), var(--font-mukta), 'Georgia', serif;
+  --font-sans: var(--font-mukta), 'Helvetica Neue', sans-serif;
 }
 
-html,
-body,
-#app {
-  height: 100%;
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  font-family: system-ui;
-  font-size: 18px;
-  line-height: 32px;
+  body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
 
-  margin: 0;
-  color: rgb(1000, 1000, 1000);
+  /* Devanagari ascenders/descenders need more vertical room */
+  :lang(ne) body {
+    line-height: 1.75;
+  }
 
-  @media (max-width: 1024px) {
-    font-size: 15px;
-    line-height: 24px;
+  ::selection {
+    background: var(--crimson);
+    color: var(--ground);
   }
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+@utility texture-weave {
+  /* Subtle warp-and-weft crosshatch, like raw wool canvas */
+  background-image:
+    repeating-linear-gradient(0deg, var(--weave) 0, var(--weave) 1px, transparent 1px, transparent 5px),
+    repeating-linear-gradient(90deg, var(--weave) 0, var(--weave) 1px, transparent 1px, transparent 5px);
 }
 
-h1 {
-  margin: 40px 0;
-  font-size: 64px;
-  line-height: 70px;
-  font-weight: bold;
-
-  @media (max-width: 1024px) {
-    margin: 24px 0;
-    font-size: 42px;
-    line-height: 42px;
+@utility prose-rug {
+  & p {
+    margin-block: calc(var(--spacing) * 4);
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
   }
 
-  @media (max-width: 768px) {
-    font-size: 38px;
-    line-height: 38px;
+  & p:first-child {
+    margin-block-start: 0;
   }
 
-  @media (max-width: 400px) {
-    font-size: 32px;
-    line-height: 32px;
-  }
-}
-
-p {
-  margin: 24px 0;
-
-  @media (max-width: 1024px) {
-    margin: calc(var(--base) * 0.75) 0;
-  }
-}
-
-a {
-  color: currentColor;
-
-  &:focus {
-    opacity: 0.8;
-    outline: none;
+  & p:last-child {
+    margin-block-end: 0;
   }
 
-  &:active {
-    opacity: 0.7;
-    outline: none;
+  & strong {
+    color: var(--ink);
+  }
+
+  & h2,
+  & h3 {
+    margin-block: calc(var(--spacing) * 6) calc(var(--spacing) * 3);
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  & ul,
+  & ol {
+    margin-block: calc(var(--spacing) * 4);
+    padding-inline-start: calc(var(--spacing) * 5);
+    list-style: disc;
+    color: var(--ink-soft);
   }
 }
 
-svg {
-  vertical-align: middle;
-}
-
-.home {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  height: 100vh;
-  padding: 45px;
-  max-width: 1024px;
-  margin: 0 auto;
-  overflow: hidden;
-
-  @media (max-width: 400px) {
-    padding: 24px;
-  }
-
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-
-    h1 {
-      text-align: center;
+@layer utilities {
+  /* Staggered fade-up for page-load reveals */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
-  .links {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    a {
-      text-decoration: none;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-    }
-
-    .admin {
-      color: rgb(0, 0, 0);
-      background: rgb(1000, 1000, 1000);
-      border: 1px solid rgb(0, 0, 0);
-    }
-
-    .docs {
-      color: rgb(1000, 1000, 1000);
-      background: rgb(0, 0, 0);
-      border: 1px solid rgb(1000, 1000, 1000);
-    }
+  .animate-rise {
+    animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .footer {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  .delay-1 {
+    animation-delay: 90ms;
+  }
+  .delay-2 {
+    animation-delay: 180ms;
+  }
+  .delay-3 {
+    animation-delay: 270ms;
+  }
+  .delay-4 {
+    animation-delay: 360ms;
+  }
 
-    @media (max-width: 1024px) {
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    p {
-      margin: 0;
-    }
-
-    .codeLink {
-      text-decoration: none;
-      padding: 0 0.5rem;
-      background: rgb(60, 60, 60);
-      border-radius: 4px;
+  @media (prefers-reduced-motion: reduce) {
+    .animate-rise {
+      animation: none;
     }
   }
 }
