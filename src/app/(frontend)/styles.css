@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
-  Galaincha — "Himalayan loom" design tokens.
+  Shah Washing — "Himalayan loom" design tokens.
   Light: undyed wool, vegetable-dye crimson, Tibetan indigo, marigold.
   Dark: night over the Himalayas — deep indigo ground, dyes glow warmer.
   The palette lives in CSS variables so both themes share one set of

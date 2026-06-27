@@ -7,8 +7,8 @@ import { rugSVG, sceneSVG, type Colorway } from './rug-art'
 // Run with: npm run seed
 // Idempotence: aborts if any user already exists.
 
-const ADMIN_EMAIL = 'admin@galaincha.com'
-const ADMIN_PASSWORD = 'galaincha2026'
+const ADMIN_EMAIL = 'admin@shahwashing.com'
+const ADMIN_PASSWORD = 'shahwashing2026'
 
 type LexicalState = {
   root: {
@@ -482,10 +482,10 @@ async function seed() {
       contactPerson: 'Deepak Shah',
       phone: '+977 9840153038',
       whatsapp: '+977 9840153038',
-      email: 'namaste@galaincha.com',
+      email: 'namaste@shahwashing.com',
       address: 'Narayantar, Jorpati\nKathmandu, Nepal',
-      instagram: 'https://instagram.com/galaincha',
-      facebook: 'https://facebook.com/galaincha',
+      instagram: 'https://instagram.com/shahwashing',
+      facebook: 'https://facebook.com/shahwashing',
       footerNote: 'Every rug is one of one.',
     },
   })
@@ -538,12 +538,12 @@ async function seed() {
     data: {
       heading: 'Our story',
       intro:
-        'Galaincha began with one loom in a Narayantar courtyard in 1974. Today thirty weavers work under the same roof — many of them children and grandchildren of the first.',
+        'Shah Washing began with one loom in a Narayantar courtyard in 1974. Today thirty weavers work under the same roof — many of them children and grandchildren of the first.',
       image: scene.id,
       body: richText(
         'The Tibetan carpet tradition arrived in Kathmandu in the early 1960s, and our family learned it the way everyone did then: by sitting beside a master until our hands knew the knots.',
         'We still card and spin by hand, dye with plants where we can, and wash every rug in the traditional way. The workshop is open to visitors six days a week — come watch a rug grow.',
-        'Every Galaincha rug is signed by its weavers and numbered. We can tell you who wove yours, what the wool ate, and which pot it was dyed in.',
+        'Every Shah Washing rug is signed by its weavers and numbered. We can tell you who wove yours, what the wool ate, and which pot it was dyed in.',
       ),
     },
   })

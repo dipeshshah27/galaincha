@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Omit<Props, 'children'>): Pro
   return {
     title: {
       default: t('title'),
-      template: '%s — Galaincha',
+      template: '%s — Shah Washing',
     },
     description: t('description'),
   }
