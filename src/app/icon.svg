@@ -1,0 +1,7 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Shah Washing">
+  <rect width="512" height="512" rx="104" fill="#f6f0e3"/>
+  <rect x="28" y="28" width="456" height="456" rx="80" fill="none" stroke="#d2941f" stroke-width="6" stroke-opacity="0.55"/>
+  <text x="50%" y="50%" dy="0.34em" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-weight="600"
+        font-size="232" letter-spacing="-6" fill="#ae1a37">SW</text>
+</svg>

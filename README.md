@@ -1,4 +1,4 @@
-# Galaincha — गलैंचा
+# Shah Washing — शाह वाशिङ
 
 **Woven in Nepal · नेपालमा बुनिएको**
 
@@ -25,7 +25,7 @@ npm run dev
 ```
 
 - Site: http://localhost:3000 (redirects to `/en`; Nepali at `/ne`)
-- Admin: http://localhost:3000/admin — `admin@galaincha.com` / `galaincha2026` (**change after first login**)
+- Admin: http://localhost:3000/admin — `admin@shahwashing.com` / `shahwashing2026` (**change after first login**)
 
 ## Content model
 
