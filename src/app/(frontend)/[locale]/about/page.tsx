@@ -8,6 +8,7 @@ import { Reveal } from '@/components/motion/Reveal'
 import { resolveLocale } from '@/i18n/locale'
 import { asMedia } from '@/lib/media'
 import { getAboutPage } from '@/lib/queries'
+import { pageMetadata } from '@/lib/seo'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -16,7 +17,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = await resolveLocale(params)
   const t = await getTranslations({ locale, namespace: 'meta.about' })
-  return { title: t('title'), description: t('description') }
+  return pageMetadata({ locale, path: '/about', title: t('title'), description: t('description') })
 }
 
 export default async function AboutRoute({ params }: Props) {

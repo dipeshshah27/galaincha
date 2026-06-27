@@ -8,9 +8,12 @@ import React from 'react'
 
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { JsonLd } from '@/components/seo/JsonLd'
 import { MotionProvider } from '@/components/motion/MotionProvider'
 import { routing } from '@/i18n/routing'
 import { getServices, getSiteSettings } from '@/lib/queries'
+import { getBaseUrl, SITE_NAME } from '@/lib/seo'
+import { businessLdJson, websiteLdJson } from '@/lib/structured-data'
 
 import '../styles.css'
 
@@ -36,13 +39,46 @@ export async function generateMetadata({ params }: Omit<Props, 'children'>): Pro
     notFound()
   }
   const t = await getTranslations({ locale, namespace: 'meta.home' })
+  const base = getBaseUrl()
+
+  const languages: Record<string, string> = {}
+  for (const l of routing.locales) {
+    languages[l] = `${base}/${l}`
+  }
+  languages['x-default'] = `${base}/${routing.defaultLocale}`
 
   return {
+    metadataBase: new URL(base),
     title: {
       default: t('title'),
-      template: '%s — Shah Washing',
+      template: `%s — ${SITE_NAME}`,
     },
     description: t('description'),
+    alternates: {
+      canonical: `${base}/${locale}`,
+      languages,
+    },
+    openGraph: {
+      type: 'website',
+      siteName: SITE_NAME,
+      locale: locale === 'ne' ? 'ne_NP' : 'en_US',
+      url: `${base}/${locale}`,
+      title: t('title'),
+      description: t('description'),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('title'),
+      description: t('description'),
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+    },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    },
   }
 }
 
@@ -58,9 +94,12 @@ export default async function LocaleLayout({ children, params }: Props) {
     getServices(locale),
   ])
 
+  const base = getBaseUrl()
+
   return (
     <html lang={locale} className={`${fraunces.variable} ${mukta.variable}`} suppressHydrationWarning>
       <body className="bg-ground font-sans text-ink antialiased">
+        <JsonLd data={[businessLdJson(settings, services, base), websiteLdJson(base)]} />
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <MotionProvider>

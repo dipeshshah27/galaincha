@@ -7,6 +7,7 @@ import { Reveal } from '@/components/motion/Reveal'
 import { RevealStagger, RevealStaggerItem } from '@/components/motion/RevealStagger'
 import { resolveLocale } from '@/i18n/locale'
 import { getSiteSettings } from '@/lib/queries'
+import { pageMetadata } from '@/lib/seo'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -15,7 +16,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = await resolveLocale(params)
   const t = await getTranslations({ locale, namespace: 'meta.contact' })
-  return { title: t('title'), description: t('description') }
+  return pageMetadata({ locale, path: '/contact', title: t('title'), description: t('description') })
 }
 
 export default async function ContactPage({ params }: Props) {

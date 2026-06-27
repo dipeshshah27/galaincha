@@ -6,11 +6,14 @@ import { CarpetDivider } from '@/components/CarpetDivider'
 import { InquiryForm } from '@/components/InquiryForm'
 import { ProductGallery, type GalleryImage } from '@/components/ProductGallery'
 import { RichTextContent } from '@/components/RichTextContent'
+import { JsonLd } from '@/components/seo/JsonLd'
 import { Reveal } from '@/components/motion/Reveal'
 import { Link } from '@/i18n/navigation'
 import { resolveLocale } from '@/i18n/locale'
 import { asMedia } from '@/lib/media'
 import { getProductBySlug } from '@/lib/queries'
+import { getBaseUrl, pageMetadata, richTextToPlain } from '@/lib/seo'
+import { breadcrumbLdJson, productLdJson } from '@/lib/structured-data'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
@@ -23,7 +26,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!product) {
     return {}
   }
-  return { title: product.name }
+  const description =
+    richTextToPlain(product.description) ||
+    [product.size, product.priceRange].filter(Boolean).join(' · ') ||
+    undefined
+  return pageMetadata({ locale, path: `/rugs/${slug}`, title: product.name, description })
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -46,8 +53,20 @@ export default async function ProductPage({ params }: Props) {
     )
   const category = typeof product.category === 'object' ? product.category : null
 
+  const base = getBaseUrl()
+  const breadcrumb = breadcrumbLdJson(
+    [
+      { name: t('nav.home'), path: '/' },
+      { name: t('nav.rugs'), path: '/rugs' },
+      { name: product.name, path: `/rugs/${product.slug}` },
+    ],
+    locale,
+    base,
+  )
+
   return (
     <div className="px-4 py-16 sm:px-6 mx-auto max-w-6xl">
+      <JsonLd data={[productLdJson(product, locale, base), breadcrumb]} />
       <Link
         href="/rugs"
         className="text-sm font-medium text-ink-soft transition-colors hover:text-crimson"

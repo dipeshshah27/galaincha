@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { HeroRug } from '@/components/HeroRug'
@@ -10,10 +11,23 @@ import { RevealStagger, RevealStaggerItem } from '@/components/motion/RevealStag
 import { Link } from '@/i18n/navigation'
 import { resolveLocale } from '@/i18n/locale'
 import { getHomePage, getServices } from '@/lib/queries'
+import { pageMetadata } from '@/lib/seo'
 import type { Product } from '@/payload-types'
 
 type Props = {
   params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const locale = await resolveLocale(params)
+  const t = await getTranslations({ locale, namespace: 'meta.home' })
+  return pageMetadata({
+    locale,
+    path: '/',
+    title: t('title'),
+    description: t('description'),
+    absoluteTitle: true,
+  })
 }
 
 export default async function HomePage({ params }: Props) {
