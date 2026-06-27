@@ -5,6 +5,7 @@ import { RugsExplorer } from '@/components/RugsExplorer'
 import { AnimatedDivider } from '@/components/motion/AnimatedDivider'
 import { resolveLocale } from '@/i18n/locale'
 import { getCategories, getProducts } from '@/lib/queries'
+import { pageMetadata } from '@/lib/seo'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -14,7 +15,7 @@ type Props = {
 export async function generateMetadata({ params }: Pick<Props, 'params'>): Promise<Metadata> {
   const locale = await resolveLocale(params)
   const t = await getTranslations({ locale, namespace: 'meta.rugs' })
-  return { title: t('title'), description: t('description') }
+  return pageMetadata({ locale, path: '/rugs', title: t('title'), description: t('description') })
 }
 
 export default async function RugsPage({ params, searchParams }: Props) {

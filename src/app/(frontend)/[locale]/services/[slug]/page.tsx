@@ -5,12 +5,15 @@ import { notFound } from 'next/navigation'
 
 import { InquiryForm } from '@/components/InquiryForm'
 import { RichTextContent } from '@/components/RichTextContent'
+import { JsonLd } from '@/components/seo/JsonLd'
 import { AnimatedDivider } from '@/components/motion/AnimatedDivider'
 import { Reveal } from '@/components/motion/Reveal'
 import { RevealStagger, RevealStaggerItem } from '@/components/motion/RevealStagger'
 import { resolveLocale } from '@/i18n/locale'
 import { asMedia } from '@/lib/media'
 import { getServiceBySlug } from '@/lib/queries'
+import { getBaseUrl, pageMetadata } from '@/lib/seo'
+import { serviceLdJson } from '@/lib/structured-data'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
@@ -23,7 +26,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!service) {
     return {}
   }
-  return { title: service.title, description: service.summary }
+  return pageMetadata({
+    locale,
+    path: `/services/${slug}`,
+    title: service.title,
+    description: service.summary,
+  })
 }
 
 export default async function ServicePage({ params }: Props) {
@@ -42,6 +50,7 @@ export default async function ServicePage({ params }: Props) {
 
   return (
     <div className="px-4 py-16 sm:px-6 mx-auto max-w-6xl">
+      <JsonLd data={serviceLdJson(service, locale, getBaseUrl())} />
       <header className="max-w-3xl">
         <h1 className="animate-rise font-display text-5xl font-semibold text-ink sm:text-6xl">
           {service.title}
